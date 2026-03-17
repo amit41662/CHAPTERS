@@ -1,0 +1,32 @@
+export const Typography = {
+  families: {
+    serif: 'PlayfairDisplay_700Bold',
+    script: 'DancingScript_700Bold',
+    sans: 'Inter_400Regular',
+    sansMedium: 'Inter_500Medium',
+    sansSemiBold: 'Inter_600SemiBold',
+    sansBold: 'Inter_700Bold',
+  },
+  sizes: {
+    chapterTitle: 28,
+    h1: 24,
+    h2: 20,
+    h3: 17,
+    body: 16,
+    bodySmall: 14,
+    caption: 12,
+    captionSmall: 10,
+    decorativeLetter: 40,
+    constellationEmoji: 20,
+    taskEmoji: 18,
+  },
+  lineHeights: {
+    chapterTitle: 36,
+    h1: 32,
+    h2: 28,
+    h3: 24,
+    body: 24,
+    bodySmall: 20,
+    caption: 16,
+  },
+} as const;
