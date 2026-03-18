@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -31,81 +31,95 @@ export function AddItemScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top + 16, paddingBottom: insets.bottom }]}>
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.cancelText}>Cancel</Text>
-        </Pressable>
-        <Text style={styles.title}>Add Item</Text>
-        <Pressable onPress={handleAdd}>
-          <Text style={[styles.addText, !text.trim() && styles.addTextDisabled]}>Add</Text>
-        </Pressable>
-      </View>
-
-      {/* Emoji + text */}
-      <View style={styles.inputRow}>
-        <Pressable
-          style={styles.emojiPickerButton}
-          onPress={() => {
-            // Cycle through a few curated emojis for quick selection
-            const idx = emoji ? CURATED_EMOJIS.indexOf(emoji as any) : -1;
-            setEmoji(CURATED_EMOJIS[(idx + 1) % CURATED_EMOJIS.length]);
-          }}
-        >
-          <Text style={styles.emojiPreview}>{emoji ?? '\u25CB'}</Text>
-        </Pressable>
-        <TextInput
-          style={styles.textInput}
-          placeholder="What's on your mind?"
-          placeholderTextColor={Colors.inputPlaceholder}
-          value={text}
-          onChangeText={setText}
-          autoFocus
-          multiline={false}
-          returnKeyType="done"
-        />
-      </View>
-
-      {/* Section selector */}
-      <Text style={styles.sectionLabel}>Section</Text>
-      <View style={styles.sectionRow}>
-        {SECTION_ORDER.map((s) => (
-          <Pressable
-            key={s}
-            style={[
-              styles.sectionChip,
-              section === s && styles.sectionChipActive,
-            ]}
-            onPress={() => setSection(s)}
-          >
-            <Text style={[
-              styles.sectionChipText,
-              section === s && styles.sectionChipTextActive,
-            ]}>
-              {SECTION_LABELS[s]}
-            </Text>
+    <KeyboardAvoidingView
+      style={styles.flex}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView
+        style={[styles.container, { paddingTop: insets.top + 16 }]}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+        keyboardShouldPersistTaps="handled"
+        bounces={false}
+      >
+        <View style={styles.header}>
+          <Pressable onPress={() => router.back()}>
+            <Text style={styles.cancelText}>Cancel</Text>
           </Pressable>
-        ))}
-      </View>
+          <Text style={styles.title}>Add Item</Text>
+          <Pressable onPress={handleAdd}>
+            <Text style={[styles.addText, !text.trim() && styles.addTextDisabled]}>Add</Text>
+          </Pressable>
+        </View>
 
-      {/* Time (optional, for appts) */}
-      {section === 'appts' && (
-        <View style={styles.timeRow}>
-          <Text style={styles.sectionLabel}>Time (optional)</Text>
+        {/* Emoji + text */}
+        <View style={styles.inputRow}>
+          <Pressable
+            style={styles.emojiPickerButton}
+            onPress={() => {
+              // Cycle through a few curated emojis for quick selection
+              const idx = emoji ? CURATED_EMOJIS.indexOf(emoji as any) : -1;
+              setEmoji(CURATED_EMOJIS[(idx + 1) % CURATED_EMOJIS.length]);
+            }}
+          >
+            <Text style={styles.emojiPreview}>{emoji ?? '\u25CB'}</Text>
+          </Pressable>
           <TextInput
-            style={styles.timeInput}
-            placeholder="e.g. 2:30 PM"
+            style={styles.textInput}
+            placeholder="What's on your mind?"
             placeholderTextColor={Colors.inputPlaceholder}
-            value={time}
-            onChangeText={setTime}
+            value={text}
+            onChangeText={setText}
+            autoFocus
+            multiline={false}
+            returnKeyType="done"
           />
         </View>
-      )}
-    </View>
+
+        {/* Section selector */}
+        <Text style={styles.sectionLabel}>Section</Text>
+        <View style={styles.sectionRow}>
+          {SECTION_ORDER.map((s) => (
+            <Pressable
+              key={s}
+              style={[
+                styles.sectionChip,
+                section === s && styles.sectionChipActive,
+              ]}
+              onPress={() => setSection(s)}
+            >
+              <Text style={[
+                styles.sectionChipText,
+                section === s && styles.sectionChipTextActive,
+              ]}>
+                {SECTION_LABELS[s]}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+
+        {/* Time (optional, for appts) */}
+        {section === 'appts' && (
+          <View style={styles.timeRow}>
+            <Text style={styles.sectionLabel}>Time (optional)</Text>
+            <TextInput
+              style={styles.timeInput}
+              placeholder="e.g. 2:30 PM"
+              placeholderTextColor={Colors.inputPlaceholder}
+              value={time}
+              onChangeText={setTime}
+            />
+          </View>
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+    backgroundColor: Colors.backgroundCardSolid,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.backgroundCardSolid,
