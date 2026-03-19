@@ -28,6 +28,8 @@ xcodebuild archive \
   -configuration Release \
   -archivePath "$ARCHIVE_PATH" \
   -destination 'generic/platform=iOS' \
+  DEVELOPMENT_TEAM=B93KRVL8V6 \
+  CODE_SIGN_STYLE=Automatic \
   -allowProvisioningUpdates \
   | grep -E "(error:|ARCHIVE SUCCEEDED|ARCHIVE FAILED)"
 
